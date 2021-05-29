@@ -10,104 +10,107 @@ const axios = require('axios');
 
 server.use(cors());
 
-// const PORT = 3001;
-
 server.get('/', (req, res) => {
     res.send('home');
 })
 
+const moviehandler = require('./modules/movie')
 server.get('/movie', moviehandler);
 
+const weatherhandler = require('./modules/weather')
 server.get('/weather', weatherhandler);
 
-class Forecast {
-    constructor(item) {
-        this.date = item.valid_date;
-        this.description = item.weather.description;
-    }
-}
 
-async function weatherhandler(req, res) {
-    let key = process.env.WEATHER_API_KEY;
+///////////////////////////////
+// class Forecast {
+//     constructor(item) {
+//         this.date = item.valid_date;
+//         this.description = item.weather.description;
+//     }
+// }
 
-    let cityName = req.query.city_name;
+// async function weatherhandler(req, res) {
+//     let key = process.env.WEATHER_API_KEY;
 
-    let url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName},NC&key=${key}&days=4`;
+//     let cityName = req.query.city_name;
 
-    try{
+//     let url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName},NC&key=${key}&days=4`;
 
-    let result = await axios.get(url)
-            let locationArr = searchQuery.data.data.map(item => {
-                return new Forecast(item);
-            })
-            res.send(locationArr);
-        }
+//     try{
 
-        catch(errors) {
-            res.status(500).send('error: the informition that you searched for it are not found', errors);
-        }
-    }
+//     let result = await axios.get(url)
+//             let locationArr = searchQuery.data.data.map(item => {
+//                 return new Forecast(item);
+//             })
+//             res.send(locationArr);
+//         }
 
-    class Formovie {
-        constructor(item) {
-            this.title = item.original_title;
-            this.overview = item.overview;
-            this.avgVotes = item.vote_average;
-            this.totalVotes = item.vote_count;
-            this.imagePath = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
-            this.popularity = item.popularity;
-            this.releaseDate = item.release_date;
-        }
-    }
+//         catch(errors) {
+//             res.status(500).send('error: the informition that you searched for it are not found', errors);
+//         }
+//     }
 
-    function moviehandler(req, res) {
-        let key1 = process.env.MOVIE_API_KEY;
-        let city = req.query.searchQuery;
+//     class Formovie {
+//         constructor(item) {
+//             this.title = item.original_title;
+//             this.overview = item.overview;
+//             this.avgVotes = item.vote_average;
+//             this.totalVotes = item.vote_count;
+//             this.imagePath = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
+//             this.popularity = item.popularity;
+//             this.releaseDate = item.release_date;
+//         }
+//     }
 
-        let url = `https://api.themoviedb.org/3/search/movie?api_key=${key1}&query=${city}&page=1`;
+//     function moviehandler(req, res) {
+//         let key1 = process.env.MOVIE_API_KEY;
+//         let city = req.query.searchQuery;
 
-        axios.get(url)
-            .then(found => {
-                const movieArr=found.data.results.map(element =>{
-                    return new Formovie(element);
-                })
-                res.send(movieArr);
-            })
+//         let url = `https://api.themoviedb.org/3/search/movie?api_key=${key1}&query=${city}&page=1`;
 
-            .catch(error =>{
-                console.log(error);
-                res.status(500).send('error: the informition that you searched for it are not found', errors);
-            })
-    }
+//         axios.get(url)
+//             .then(found => {
+//                 const movieArr=found.data.results.map(element =>{
+//                     return new Formovie(element);
+//                 })
+//                 res.send(movieArr);
+//             })
+
+//             .catch(error =>{
+//                 console.log(error);
+//                 res.status(500).send('error: the informition that you searched for it are not found', errors);
+//             })
+//     }
 
 
-    server.get('*', (req, res) => {
-        res.status(404).send('Not Found')
-    })
+server.get('*', (req, res) => {
+    res.status(404).send('Not Found')
+})
 
-    server.listen(PORT, () => {
-        console.log(`Listening on PORT ${PORT}`);
-    })
+server.listen(PORT, () => {
+    console.log(`Listening on PORT ${PORT}`);
+})
 
-     // http://localhost:3001/getLocation?city_name=Amman
-    // server.get('/getLocation', (req, res) => {
-    //             console.log(req.query);
+    /////////////////////
+//      // http://localhost:3001/getLocation?city_name=Amman
+//     // server.get('/getLocation', (req, res) => {
+//     //             console.log(req.query);
 
-    //             let searchQuery = weatherData.find(item => {
-    //                 if (item.city_name.toLocaleLowerCase() == cityName.toLocaleLowerCase()) {
-    //                     return item;
-    //                 }
-    //             })
-    //             console.log(searchQuery);
+//     //             let searchQuery = weatherData.find(item => {
+//     //                 if (item.city_name.toLocaleLowerCase() == cityName.toLocaleLowerCase()) {
+//     //                     return item;
+//     //                 }
+//     //             })
+//     //             console.log(searchQuery);
 
-    //             try {
-    //                 let locationArr = searchQuery.data.map(item => {
-    //                     return new Forecast(item);
-    //                 })
+//     //             try {
+//     //                 let locationArr = searchQuery.data.map(item => {
+//     //                     return new Forecast(item);
+//     //                 })
 
-    //                 res.send(locationArr);
-    //             }
-    //             catch (errors) {
-    //                 res.status(500).send('error: the informition that you searched for it are not found');
-    //             }
-    //         })
+//     //                 res.send(locationArr);
+//     //             }
+//     //             catch (errors) {
+//     //                 res.status(500).send('error: the informition that you searched for it are not found');
+//     //             }
+//     //         })
